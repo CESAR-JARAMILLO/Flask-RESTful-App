@@ -4,6 +4,7 @@ from flask_restful import Resource, Api
 
 # Creates Flask app
 app = Flask(__name__)
+app.secret_key = 'cesar'
 # Creates API for app
 api = Api(app)
 
