@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_restful import Resource, Api
 
 
@@ -16,13 +16,21 @@ class Item(Resource):
         for item in items:
             if item['name'] == name:
                 return item
+        return {'item': None}, 404
 
     def post(self,name):
-        item = {'name': name, 'price': 12.00}
+        # get JSON payload from request
+        data = request.get_json()
+        item = {'name': name, 'price': data['price']}
         items.append(item)
-        return item
+        return item, 201
+
+class ItemList(Resource):
+    def get(self):
+        return {"items": items}
 
 # Adss resource and determines how it's accesed
 api.add_resource(Item, '/item/<string:name>')
+api.add_resource(ItemList, '/items')
 
-app.run()
+app.run(debug=True)
